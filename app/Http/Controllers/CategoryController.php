@@ -33,9 +33,9 @@ class CategoryController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        $category = Category::findOrFail($id);
+        // $category = Category::findOrFail($id);
 
         $validated = $request->validate([
             'name' => 'required|string|max:250'
@@ -54,5 +54,23 @@ class CategoryController extends Controller
         ]);
 
         return response()->json($category, 200);
+    }
+
+
+    public function destroy(Request $request, Category $category)
+    {
+        $user = $request->user();
+
+        if($category->user_id !== $user->id){
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $category->delete();
+
+        return response()->json([
+            'message' => 'Category deleted seccussfully'
+        ]);
     }
 }
