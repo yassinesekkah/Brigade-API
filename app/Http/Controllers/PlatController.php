@@ -39,7 +39,31 @@ class PlatController extends Controller
         ]);
 
         return response()->json($plat, 201);
+    }
 
 
+    public function index(Request $request)
+    {
+        $plats = $request->user()
+                        ->plats()
+                        ->with('category')
+                        ->latest()
+                        ->get();
+
+        return response()->json($plats);
+    }
+
+
+    public function platsByCategory(Category $category, Request $request)
+    {
+        if($category->user_id !== $request->user()->id){
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $plats = $category->plats()->get();
+
+        return response()->json($plats);
     }
 }

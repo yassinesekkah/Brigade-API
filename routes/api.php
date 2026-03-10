@@ -24,5 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
 ///===> Plats Routes  <===\\\
 
     Route::post('/plats', [PlatController::class, 'store']);
+    Route::get('/plats', [PlatController::class, 'index']);
+    Route::get('/categories/{category}/plats', [PlatController::class, 'platsByCategory']);
+
 
 });
