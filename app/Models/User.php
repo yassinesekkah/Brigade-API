@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Category::class);
     }
+
+    public function plats(): HasMany
+    {
+        return $this->hasMany(Plat::class);
+    }
 }
