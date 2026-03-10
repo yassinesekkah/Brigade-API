@@ -15,7 +15,8 @@ class PlatController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
        
@@ -29,13 +30,20 @@ class PlatController extends Controller
             ], 404);
         }
 
+        $imagePath = null;
+
+        if($request->hasFile('image')){
+            $imagePath = $request->file('image')->store('plats', 'public');
+        }
+
         // create plat
         $plat = Plat::create([
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
             'price' => $validated['price'],
             'category_id' => $category->id,
-            'user_id' => $request->user()->id
+            'user_id' => $request->user()->id,
+            'image' => $imagePath
         ]);
 
         return response()->json($plat, 201);
