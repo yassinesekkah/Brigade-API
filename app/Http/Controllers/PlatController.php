@@ -120,4 +120,22 @@ class PlatController extends Controller
 
         return response()->json($plat);
     }
+
+
+    public function destroy(Request $request, Plat $plat)
+    {
+        $user = $request->user();
+
+        if($plat->user_id !== $user->id){
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $plat->delete();
+
+        return response()->json([
+            'message' => 'Plat deleted seccussfully'
+        ]);
+    }
 }
