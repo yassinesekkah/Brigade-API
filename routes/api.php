@@ -16,5 +16,6 @@ Route::middleware('auth:sanctum')->group(function () {
 ///===> Category Routes  <===\\\
 
     Route::post('/categories', [CategoryController::class, 'store']);
+    Route::get('/categories', [CategoryController::class, 'index']);
 
 });
