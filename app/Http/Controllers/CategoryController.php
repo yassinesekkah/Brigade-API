@@ -31,4 +31,28 @@ class CategoryController extends Controller
 
         return response()->json($category, 201);
     }
+
+
+    public function update(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:250'
+        ]);
+        
+        $user = $request->user();
+
+        if($category->user_id !== $user->id){
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $category->update([
+            'name' => $validated['name']
+        ]);
+
+        return response()->json($category, 200);
+    }
 }
