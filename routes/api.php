@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/plats', [PlatController::class, 'index']);
     Route::get('/categories/{category}/plats', [PlatController::class, 'platsByCategory']);
     Route::get('/plats/{plat}', [PlatController::class, 'show']);
+    Route::put('/plats/{plat}', [PlatController::class, 'update']);
     
 
 });

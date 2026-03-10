@@ -87,7 +87,37 @@ class PlatController extends Controller
         }
 
         $plat->load('category');
-        
+
+        return response()->json($plat);
+    }
+
+
+    public function update(Request $request, Plat $plat)
+    {
+        $user = $request->user();
+
+        if($user->id !== $plat->user_id){
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:250',
+            'description' => 'nullable|string',
+            'price' => 'sometimes|numeric',
+            'category_id' => 'sometimes|exists:categories,id',
+            'image' => 'nullable|image'
+        ]);
+
+        if($request->hasFile('image')){
+            $validated['image'] = $request->file('image')
+                                            ->store('plats', 'public');
+        }
+
+        $plat->update($validated);
+
+
         return response()->json($plat);
     }
 }
