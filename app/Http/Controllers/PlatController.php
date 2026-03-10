@@ -74,4 +74,20 @@ class PlatController extends Controller
 
         return response()->json($plats);
     }
+
+
+    public function show(Request $request, Plat $plat)
+    {
+        $user = $request->user();
+
+        if($user->id !== $plat->user_id){
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $plat->load('category');
+        
+        return response()->json($plat);
+    }
 }
