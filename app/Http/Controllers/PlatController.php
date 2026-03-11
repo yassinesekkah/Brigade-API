@@ -52,6 +52,8 @@ class PlatController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Plat::class);
+        
         $plats = $request->user()
                         ->plats()
                         ->with('category')
@@ -62,13 +64,9 @@ class PlatController extends Controller
     }
 
 
-    public function platsByCategory(Category $category, Request $request)
+    public function platsByCategory(Category $category)
     {
-        if($category->user_id !== $request->user()->id){
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 403);
-        }
+        $this->authorize('view', $category);
 
         $plats = $category->plats()->get();
 
@@ -76,15 +74,9 @@ class PlatController extends Controller
     }
 
 
-    public function show(Request $request, Plat $plat)
+    public function show(Plat $plat)
     {
-        $user = $request->user();
-
-        if($user->id !== $plat->user_id){
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 403);
-        }
+        $this->authorize('update', $plat);
 
         $plat->load('category');
 
@@ -94,13 +86,8 @@ class PlatController extends Controller
 
     public function update(Request $request, Plat $plat)
     {
-        $user = $request->user();
 
-        if($user->id !== $plat->user_id){
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 403);
-        }
+        $this->authorize('update', $plat);
 
         $validated = $request->validate([
             'name' => 'sometimes|string|max:250',
@@ -122,15 +109,9 @@ class PlatController extends Controller
     }
 
 
-    public function destroy(Request $request, Plat $plat)
+    public function destroy(Plat $plat)
     {
-        $user = $request->user();
-
-        if($plat->user_id !== $user->id){
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 403);
-        }
+        $this->authorize('delete', $plat);
 
         $plat->delete();
 
