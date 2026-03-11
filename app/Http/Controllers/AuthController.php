@@ -5,9 +5,44 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use OpenApi\Attributes as OA;
 
 class AuthController extends Controller
 {
+
+
+    #[OA\Post(
+        path: "/api/register",
+        summary: "Register a new user",
+        tags: ["Auth"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["name", "email", "password"],
+                properties: [
+                    new OA\Property(property: "name", type: "string", example: "Yassine"),
+                    new OA\Property(property: "email", type: "string", example: "yassine@mail.com"),
+                    new OA\Property(property: "password", type: "string", example: "123456")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "User registered successfully",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "user", type: "object"),
+                        new OA\Property(property: "token", type: "string", example: "1|xYzTokenExample")
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: "Validation error"
+            )
+        ]
+    )]
     public function register(Request $request)
     {
         $validated = $request->validate([
