@@ -35,19 +35,12 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        // $category = Category::findOrFail($id);
-
+        
         $validated = $request->validate([
             'name' => 'required|string|max:250'
         ]);
-        
-        $user = $request->user();
 
-        if($category->user_id !== $user->id){
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 403);
-        }
+        $this->authorize('update', $category);
 
         $category->update([
             'name' => $validated['name']
@@ -57,15 +50,9 @@ class CategoryController extends Controller
     }
 
 
-    public function destroy(Request $request, Category $category)
+    public function destroy(Category $category)
     {
-        $user = $request->user();
-
-        if($category->user_id !== $user->id){
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 403);
-        }
+        $this->authorize('delete', $category);
 
         $category->delete();
 
