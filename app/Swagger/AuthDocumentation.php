@@ -38,7 +38,7 @@ class AuthDocumentation
             )
         ]
     )]
-    public function register(){}
+    public function register() {}
 
     #[OA\Post(
         path: "/api/login",
@@ -71,5 +71,43 @@ class AuthDocumentation
             )
         ]
     )]
-    public function login(){}
+    public function login() {}
+
+
+    #[OA\Post(
+        path: "/api/logout",
+        summary: "Logout authenticated user",
+        tags: ["Auth"],
+        security: [["sanctum" => []]],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "User logged out successfully"
+            ),
+            new OA\Response(
+                response: 401,
+                description: "Unauthenticated"
+            )
+        ]
+    )]
+    public function logout() {}
+
+
+    #[OA\Get(
+        path: "/api/user",
+        summary: "Get authenticated user",
+        tags: ["Auth"],
+        security: [["sanctum" => []]],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Authenticated user data"
+            ),
+            new OA\Response(
+                response: 401,
+                description: "Unauthenticated"
+            )
+        ]
+    )]
+    public function user() {}
 }
