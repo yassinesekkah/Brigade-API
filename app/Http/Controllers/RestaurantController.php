@@ -34,4 +34,11 @@ class RestaurantController extends Controller
 
         return response()->json($restaurant);
     }
+
+    public function me(Request $request)
+    {
+        $myRestaurant = $request->user()->restaurant;
+
+        return response()->json($myRestaurant);
+    }
 }

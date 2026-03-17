@@ -32,7 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/plats/{plat}', [PlatController::class, 'destroy']);
 
 ///===> Restaurant Routes  <===\\\
-    Route::post('/restaurant', [RestaurantController::class, 'store']);
+    Route::post('/restaurants', [RestaurantController::class, 'store']);
+    Route::get('/restaurants/me', [RestaurantController::class, 'me']);
 
 
 });
