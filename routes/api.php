@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PlatController;
+use App\Http\Controllers\RestaurantController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -29,5 +30,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/plats/{plat}', [PlatController::class, 'show']);
     Route::put('/plats/{plat}', [PlatController::class, 'update']);
     Route::delete('/plats/{plat}', [PlatController::class, 'destroy']);
+
+///===> Restaurant Routes  <===\\\
+    Route::post('/restaurant', [RestaurantController::class, 'store']);
+
 
 });
