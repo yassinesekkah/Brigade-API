@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -48,11 +49,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function categories(): HasMany
-    {
-        return $this->hasMany(Category::class);
-    }
-
     public function plats(): HasMany
     {
         return $this->hasMany(Plat::class);
@@ -61,5 +57,10 @@ class User extends Authenticatable
     public function restaurant(): HasOne
     {
         return $this->hasOne(Restaurant::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
     }
 }

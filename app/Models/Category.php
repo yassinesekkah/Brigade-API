@@ -10,12 +10,12 @@ class Category extends Model
 {    
     protected $fillable = [
         'name',
-        'user_id'
+        'restaurant_id'
     ];
 
-    public function user(): BelongsTo
+    public function restaurant(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Restaurant::class);
     }
 
     public function plats(): HasMany
