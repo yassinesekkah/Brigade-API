@@ -16,10 +16,17 @@ class RestaurantController extends Controller
             'address' => 'nullable|string'
         ]);
 
-        ///check if user already has a restaurant
         $user  = $request->user();
-       
-        if($user->restaurant){
+
+        ///check user role
+        if ($user->role !== 'admin') {
+            return response()->json([
+                'message' => 'Only admin can create restaurant'
+            ], 403);
+        }
+
+        ///check if user already has a restaurant
+        if ($user->restaurant) {
             return response()->json([
                 'message' => 'You already have a restaurant'
             ], 403);
@@ -27,8 +34,8 @@ class RestaurantController extends Controller
 
         $restaurant = Restaurant::create([
             'name' => $validated['name'],
-            'description' => $validated['description'],
-            'address' => $validated['address'],
+            'description' => $validated['description'] ?? null,
+            'address' => $validated['address'] ?? null,
             'user_id' => $user->id
         ]);
 
