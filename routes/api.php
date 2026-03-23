@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\PlatController;
 use App\Http\Controllers\RestaurantController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/categories', [CategoryController::class, 'store']);
         Route::put('/categories/{category}', [CategoryController::class, 'update']);
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+
+        ///===> Ingredient Routes  <===\\\
+        Route::get('/ingredients', [IngredientController::class, 'index']);
+        Route::post('/ingredients', [IngredientController::class, 'store']);
+        Route::put('/ingredients/{ingredient}', [IngredientController::class, 'update']);
+        Route::delete('/ingredients/{ingredient}', [IngredientController::class, 'destroy']);
     });
 
     ///===> Plats Routes  <===\\\
@@ -44,5 +51,4 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/restaurants/me', [RestaurantController::class, 'me']);
-
 });

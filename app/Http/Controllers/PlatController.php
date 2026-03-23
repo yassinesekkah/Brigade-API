@@ -16,7 +16,9 @@ class PlatController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'ingredient_ids' => 'nullable|array',
+            'ingredient_ids.*' => 'exists:ingredients,id',
         ]);
 
        
@@ -46,6 +48,12 @@ class PlatController extends Controller
             'image' => $imagePath
         ]);
 
+        if (isset($validated['ingredient_ids'])) {
+            $plat->ingredients()->sync($validated['ingredient_ids']);
+        }
+
+        $plat->load(['category', 'ingredients']);
+
         return response()->json($plat, 201);
     }
 
@@ -56,7 +64,7 @@ class PlatController extends Controller
         
         $plats = $request->user()
                         ->plats()
-                        ->with('category')
+                        ->with(['category', 'ingredients'])
                         ->latest()
                         ->get();
 
@@ -68,7 +76,7 @@ class PlatController extends Controller
     {
         $this->authorize('view', $category);
 
-        $plats = $category->plats()->get();
+        $plats = $category->plats()->with('ingredients')->get();
 
         return response()->json($plats);
     }
@@ -78,7 +86,7 @@ class PlatController extends Controller
     {
         $this->authorize('update', $plat);
 
-        $plat->load('category');
+        $plat->load(['category', 'ingredients']);
 
         return response()->json($plat);
     }
@@ -94,8 +102,13 @@ class PlatController extends Controller
             'description' => 'nullable|string',
             'price' => 'sometimes|numeric',
             'category_id' => 'sometimes|exists:categories,id',
-            'image' => 'nullable|image'
+            'image' => 'nullable|image',
+            'ingredient_ids' => 'nullable|array',
+            'ingredient_ids.*' => 'exists:ingredients,id',
         ]);
+
+        $ingredientIds = $validated['ingredient_ids'] ?? null;
+        unset($validated['ingredient_ids']);
 
         if($request->hasFile('image')){
             $validated['image'] = $request->file('image')
@@ -103,6 +116,12 @@ class PlatController extends Controller
         }
 
         $plat->update($validated);
+
+        if ($request->has('ingredient_ids')) {
+            $plat->ingredients()->sync($ingredientIds ?? []);
+        }
+
+        $plat->load(['category', 'ingredients']);
 
 
         return response()->json($plat);

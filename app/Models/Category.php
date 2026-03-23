@@ -10,7 +10,7 @@ class Category extends Model
 {    
     protected $fillable = [
         'name',
-        'restaurant_id'
+        'restaurant_id',
     ];
 
     public function restaurant(): BelongsTo
@@ -22,4 +22,6 @@ class Category extends Model
     {
         return $this->hasMany(Plat::class);
     }
+    
+    
 }
