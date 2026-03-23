@@ -30,8 +30,9 @@ class CategoryController extends Controller
     {
         $user = $request->user();
 
+        
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,NULL,id,restaurant_id,' . $user->restaurant->id
+            'name' => 'required|string|max:255'
         ]);
 
         ///check if is admin
@@ -45,6 +46,13 @@ class CategoryController extends Controller
         if(!$user->restaurant){
             return response()->json([
                 'message' => 'You must create a restaurant first'
+            ], 403);
+        }
+
+        //check if category name already exists for this restaurant
+        if($user->restaurant->categories()->where('name', $validated['name'])->exists()){
+            return response()->json([
+                'message' => 'Category name already exists'
             ], 403);
         }
 
