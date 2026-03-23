@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\PlatController;
 use App\Http\Controllers\RestaurantController;
 use Illuminate\Support\Facades\Route;
@@ -15,26 +16,39 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
 
-///===> Category Routes  <===\\\
+    ///===> Category Routes  <===\\\
 
-    Route::post('/categories', [CategoryController::class, 'store']);
     Route::get('/categories', [CategoryController::class, 'index']);
-    Route::put('/categories/{category}', [CategoryController::class, 'update']);
-    Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
 
-///===> Plats Routes  <===\\\
+    Route::middleware('admin')->group(function () {
+        Route::post('/categories', [CategoryController::class, 'store']);
+        Route::put('/categories/{category}', [CategoryController::class, 'update']);
+        Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
 
-    Route::post('/plats', [PlatController::class, 'store']);
+        ///===> Ingredient Routes  <===\\\
+        Route::get('/ingredients', [IngredientController::class, 'index']);
+        Route::post('/ingredients', [IngredientController::class, 'store']);
+        Route::put('/ingredients/{ingredient}', [IngredientController::class, 'update']);
+        Route::delete('/ingredients/{ingredient}', [IngredientController::class, 'destroy']);
+    });
+
+    ///===> Plats Routes  <===\\\
+
     Route::get('/plats', [PlatController::class, 'index']);
-    Route::get('/categories/{category}/plats', [PlatController::class, 'platsByCategory']);
     Route::get('/plats/{plat}', [PlatController::class, 'show']);
-    Route::put('/plats/{plat}', [PlatController::class, 'update']);
-    Route::delete('/plats/{plat}', [PlatController::class, 'destroy']);
+    Route::get('/categories/{category}/plats', [PlatController::class, 'platsByCategory']);
 
-///===> Restaurant Routes  <===\\\
+    Route::middleware('admin')->group(function () {
+        Route::post('/plats', [PlatController::class, 'store']);
+        Route::put('/plats/{plat}', [PlatController::class, 'update']);
+        Route::delete('/plats/{plat}', [PlatController::class, 'destroy']);
+    });
 
-    Route::post('/restaurants', [RestaurantController::class, 'store']);
+    ///===> Restaurant Routes  <===\\\
+
+    Route::middleware('admin')->group(function () {
+        Route::post('/restaurants', [RestaurantController::class, 'store']);
+    });
+
     Route::get('/restaurants/me', [RestaurantController::class, 'me']);
-
-
 });

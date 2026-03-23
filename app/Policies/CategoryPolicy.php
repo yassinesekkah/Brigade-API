@@ -45,7 +45,9 @@ class CategoryPolicy
      */
     public function delete(User $user, Category $category): bool
     {
-        return $user->restaurant && $user->restaurant->id === $category->restaurant_id;
+        return
+            $user->restaurant
+            && $user->restaurant->id === $category->restaurant_id;
     }
 
     /**
