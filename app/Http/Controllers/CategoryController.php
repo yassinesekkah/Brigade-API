@@ -91,4 +91,5 @@ class CategoryController extends Controller
             'message' => 'Category deleted seccussfully'
         ]);
     }
+
 }
