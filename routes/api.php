@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\PlatController;
+use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\RestaurantController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,4 +52,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/restaurants/me', [RestaurantController::class, 'me']);
+
+    Route::post('/recommendations/analyze/{plat}',[RecommendationController::class, 'analyze']
+);
 });
