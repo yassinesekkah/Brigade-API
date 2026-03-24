@@ -14,13 +14,16 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
+            'dietary_tags' => 'nullable|array',
+            'dietary_tags.*' => 'string|max:255',
         ]);
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
-            'role' => 'client'
+            'role' => 'client',
+            'dietary_tags' => $validated['dietary_tags'] ?? null,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -70,6 +73,6 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        return response()->json($user);
+        return response()->json($user); 
     }
 }
