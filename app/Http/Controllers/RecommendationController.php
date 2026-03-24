@@ -29,6 +29,12 @@ class RecommendationController extends Controller
             'status' => 'processing'
         ], 202);
 
-        
+    }
+
+    public function show(Recommendation $recommendation)
+    {
+        $this->authorize('view', $recommendation);
+
+        return response()->json($recommendation);
     }
 }
