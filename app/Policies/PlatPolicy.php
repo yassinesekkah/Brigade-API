@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Models\Plat;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+
 
 class PlatPolicy
 {
@@ -21,7 +21,8 @@ class PlatPolicy
      */
     public function view(User $user, Plat $plat): bool
     {
-        return $user->id === $plat->user_id;
+        return $user->restaurant
+        && $user->restaurant->id === $plat->category->restaurant_id;
     }
 
     /**
@@ -37,7 +38,7 @@ class PlatPolicy
      */
     public function update(User $user, Plat $plat): bool
     {
-        return $user->id === $plat->user_id;
+        return $user->restaurant() && $user->restaurant->id === $plat->category->restaurant_id;
     }
 
     /**
@@ -45,7 +46,8 @@ class PlatPolicy
      */
     public function delete(User $user, Plat $plat): bool
     {
-        return $user->id === $plat->user_id;
+        return $user->restaurant
+        && $user->restaurant->id === $plat->category->restaurant_id;
     }
 
     /**
