@@ -314,6 +314,168 @@
                 ]
             }
         },
+        "/api/ingredients": {
+            "get": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Get all ingredients",
+                "operationId": "getIngredients",
+                "responses": {
+                    "200": {
+                        "description": "List of ingredients"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Create a new ingredient",
+                "operationId": "storeIngredient",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Milk"
+                                    },
+                                    "tags": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "contains_lactose"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ingredient created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/ingredients/{ingredient}": {
+            "put": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Update an ingredient",
+                "operationId": "updateIngredient",
+                "parameters": [
+                    {
+                        "name": "ingredient",
+                        "in": "path",
+                        "description": "Ingredient ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Cheese"
+                                    },
+                                    "tags": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "contains_lactose"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ingredient updated successfully"
+                    },
+                    "404": {
+                        "description": "Ingredient not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Delete an ingredient",
+                "operationId": "deleteIngredient",
+                "parameters": [
+                    {
+                        "name": "ingredient",
+                        "in": "path",
+                        "description": "Ingredient ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ingredient deleted successfully"
+                    },
+                    "404": {
+                        "description": "Ingredient not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/plats": {
             "get": {
                 "tags": [
@@ -520,6 +682,174 @@
                     }
                 ]
             }
+        },
+        "/api/recommendations/analyze/{plat}": {
+            "post": {
+                "tags": [
+                    "Recommendations"
+                ],
+                "summary": "Start analysis of a plat (async)",
+                "operationId": "analyzeRecommendation",
+                "parameters": [
+                    {
+                        "name": "plat",
+                        "in": "path",
+                        "description": "Plat ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Analysis started (processing)"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Plat not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/recommendations/{recommendation}": {
+            "get": {
+                "tags": [
+                    "Recommendations"
+                ],
+                "summary": "Get recommendation result",
+                "operationId": "getRecommendation",
+                "parameters": [
+                    {
+                        "name": "recommendation",
+                        "in": "path",
+                        "description": "Recommendation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Recommendation data"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Recommendation not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/recommendations": {
+            "get": {
+                "tags": [
+                    "Recommendations"
+                ],
+                "summary": "Get user recommendation history",
+                "operationId": "getUserRecommendations",
+                "responses": {
+                    "200": {
+                        "description": "List of user recommendations"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/restaurants": {
+            "post": {
+                "tags": [
+                    "Restaurants"
+                ],
+                "summary": "Create a restaurant (admin only)",
+                "operationId": "storeRestaurant",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "My Restaurant"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Best food in town"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Casablanca"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Restaurant created successfully"
+                    },
+                    "403": {
+                        "description": "Unauthorized or already has a restaurant"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/restaurants/me": {
+            "get": {
+                "tags": [
+                    "Restaurants"
+                ],
+                "summary": "Get authenticated user's restaurant",
+                "operationId": "getMyRestaurant",
+                "responses": {
+                    "200": {
+                        "description": "User restaurant data"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -541,8 +871,20 @@
             "description": "Categories"
         },
         {
+            "name": "Ingredients",
+            "description": "Ingredients"
+        },
+        {
             "name": "Plats",
             "description": "Plats"
+        },
+        {
+            "name": "Recommendations",
+            "description": "Recommendations"
+        },
+        {
+            "name": "Restaurants",
+            "description": "Restaurants"
         }
     ]
 }
