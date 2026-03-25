@@ -10,7 +10,7 @@ use App\Services\RecommendationService;
 class RecommendationController extends Controller
 {
     public function analyze(Plat $plat, RecommendationService $service)
-    {
+    {   
         $user = auth()->user();
 
         //create a recommendation
