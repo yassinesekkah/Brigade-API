@@ -18,7 +18,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
 
     ///===> Category Routes  <===\\\
-
     Route::get('/categories', [CategoryController::class, 'index']);
 
     Route::middleware('admin')->group(function () {
@@ -34,7 +33,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     ///===> Plats Routes  <===\\\
-
     Route::get('/plats', [PlatController::class, 'index']);
     Route::get('/plats/{plat}', [PlatController::class, 'show']);
     Route::get('/categories/{category}/plats', [PlatController::class, 'platsByCategory']);
@@ -46,13 +44,15 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     ///===> Restaurant Routes  <===\\\
-
     Route::middleware('admin')->group(function () {
         Route::post('/restaurants', [RestaurantController::class, 'store']);
     });
 
     Route::get('/restaurants/me', [RestaurantController::class, 'me']);
 
-    Route::post('/recommendations/analyze/{plat}',[RecommendationController::class, 'analyze']
-);
+
+    ///===> Recommendation Routes  <===\\\
+    Route::post('/recommendations/analyze/{plat}',[RecommendationController::class, 'analyze']);
+    Route::get('/recommendations/{recommendation}', [RecommendationController::class, 'show']);
+    Route::get('/recommendations', [RecommendationController::class, 'index']);
 });

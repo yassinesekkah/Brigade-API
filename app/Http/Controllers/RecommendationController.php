@@ -28,7 +28,24 @@ class RecommendationController extends Controller
             'recommendation_id' => $recommendation->id,
             'status' => 'processing'
         ], 202);
+    }
 
-        
+    public function show(Recommendation $recommendation)
+    {
+        $this->authorize('view', $recommendation);
+
+        return response()->json($recommendation);
+    }
+
+    public function index()
+    {
+        $user = auth()->user();
+
+        $recommendations = Recommendation::where('user_id', $user->id)
+            ->with('plat')
+            ->latest()
+            ->get();
+
+        return response()->json($recommendations);
     }
 }
