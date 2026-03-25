@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Services\AIService;
 use App\Services\RecommendationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -23,11 +24,12 @@ class AnalyzeRecommendationJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(RecommendationService $service): void
+    public function handle(RecommendationService $service, AIService $aiService): void
     {
         $user = $this->recommendation->user;
         $plat = $this->recommendation->plat;
 
+        //calculate score
         $result = $service->calculateScore($user, $plat);
 
         $this->recommendation->update([
