@@ -33,7 +33,7 @@ PROMPT;
 
         try {
 
-            logger('GROQ KEY: ' . env('GROQ_API_KEY')); // 🔥 debug
+            logger('GROQ KEY: ' . env('GROQ_API_KEY')); 
 
             $response = Http::withOptions([
                 'verify' => false,
@@ -53,7 +53,7 @@ PROMPT;
 
             $data = $response->json();
 
-            logger($data); // 🔥 نشوف response كامل
+            logger($data); 
 
             return $data;
         } catch (\Throwable $e) {

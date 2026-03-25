@@ -35,9 +35,6 @@ class AnalyzeRecommendationJob implements ShouldQueue
         $user = $this->recommendation->user;
         $plat = $this->recommendation->plat;
 
-        // calculate score (code)
-        $result = $service->calculateScore($user, $plat);
-
         //collect ingredient tags
         $ingredientTags = $plat->ingredients
             ->flatMap(fn($ingredient) => $ingredient->tags ?? [])
@@ -52,21 +49,44 @@ class AnalyzeRecommendationJob implements ShouldQueue
                 $user->dietary_tags ?? []
             );
 
-            
             logger($aiResponse);
 
-            $explanation = $aiResponse['choices'][0]['message']['content'] ?? null;
+            $content = $aiResponse['choices'][0]['message']['content'] ?? null;
 
+            preg_match('/\{.*\}/s', $content, $matches);
+            $json = $matches[0] ?? null;
+
+            $parsed = json_decode($json, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                logger('Invalid AI JSON: ' . $json);
+
+                $aiScore = 0;
+                $aiMessage = 'AI parsing error';
+            } else {
+                $aiScore = $parsed['score'] ?? 0;
+
+                if (!is_numeric($aiScore)) {
+                    logger('AI score is not numeric: ' . $aiScore);
+                    $aiScore = 0;
+                }
+                $aiScore = max(0, min(100, (int)$aiScore)); // ensure score is between 0 and 100
+
+                $aiMessage = isset($parsed['warning_message']) && is_string($parsed['warning_message'])
+                    ? $parsed['warning_message']
+                    : null;
+            }
         } catch (\Throwable $e) {
-            
             logger($e->getMessage());
-            $explanation = null;
+
+            $aiScore = 0;
+            $aiMessage = null;
         }
 
-        // 🔥 4. update recommendation
+        // update recommendation
         $this->recommendation->update([
-            'score' => $result['score'], // ✔️ من code
-            'warning_message' => $explanation,
+            'score' => $aiScore,
+            'warning_message' => $aiMessage,
             'status' => 'ready',
         ]);
     }
