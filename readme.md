@@ -56,7 +56,7 @@ Controller → Job → Service → AIService → Database
 ## 📦 Installation
 
 git clone https://github.com/yassinesekkah/Brigade-API
-cd your-repo  
+cd Brigade-API 
 
 composer install  
 cp .env.example .env  
