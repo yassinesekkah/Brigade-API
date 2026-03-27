@@ -55,7 +55,7 @@ Controller → Job → Service → AIService → Database
 
 ## 📦 Installation
 
-git clone https://github.com/your-username/your-repo.git  
+git clone https://github.com/yassinesekkah/Brigade-API
 cd your-repo  
 
 composer install  
