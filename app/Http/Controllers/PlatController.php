@@ -61,18 +61,9 @@ class PlatController extends Controller
     }
 
 
-    public function index(Request $request)
+    public function index()
     {
-        $this->authorize('viewAny', Plat::class);
-
-        $user = $request->user();
-
-
-
-        $plats = Plat::whereHas('category', function ($query) use ($user) {
-            $query->where('restaurant_id', $user->restaurant->id);
-        })
-            ->with(['category', 'ingredients'])
+        $plats = Plat::with(['category', 'ingredients'])
             ->latest()
             ->get();
 
@@ -92,7 +83,7 @@ class PlatController extends Controller
 
     public function show(Plat $plat)
     {
-        $this->authorize('update', $plat);
+        $this->authorize('viewAny', $plat);
 
         $plat->load(['category', 'ingredients']);
 
